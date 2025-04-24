@@ -1,11 +1,13 @@
-import socket
+import socketserver
 import socks
 
-s = socks.socksocket()
-s.set_proxy(socks.SOCKS5, "127.0.0.1", 1080)
-s.bind(("0.0.0.0", 1080))
-s.listen(5)
+class ProxyHandler(socketserver.StreamRequestHandler):
+    def handle(self):
+        print(f"Incoming connection from {self.client_address}")
+        # هون ما منرد ولا منعمل شي مباشر لأنه هذا SOCKS5 مش HTTP
+        self.wfile.write(b"SOCKS5 Proxy is running via Render\n")
 
-while True:
-    conn, addr = s.accept()
-    print("Connection from", addr)
+if __name__ == "__main__":
+    print("Starting proxy server on port 10000...")
+    with socketserver.TCPServer(("0.0.0.0", 10000), ProxyHandler) as server:
+        server.serve_forever()
