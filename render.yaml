@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: socks5-proxy
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    plan: free
